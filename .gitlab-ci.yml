@@ -1,0 +1,20 @@
+Deploy-Test:
+  stage: deploy
+  script:
+    - npm install
+    - npm run build:test # 打包构建
+    - tar-cli fe_deploy -a {{name}} -h {{name}}.tarsocial.com --vhost
+  environment: testing
+  only:
+    - develop
+
+Deploy-Prod:
+  stage: deploy
+  script:
+    - npm install
+    - npm run build:prod # 打包构建
+    - tar-cli fe_deploy -a {{name}} -h {{name}}.tarsocial.com --vhost
+  environment: production
+  when: manual
+  only:
+    - master

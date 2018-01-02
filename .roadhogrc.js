@@ -1,35 +1,27 @@
 const path = require('path')
 const { version } = require('./package.json')
 
-const svgSpriteDirs = [
-  path.resolve(__dirname, 'src/svg/'),
-  require.resolve('antd').replace(/index\.js$/, '')
-]
+const branchName = process.env.BRANCH_NAME || process.env.BRANCH_NAME2
 
 export default {
   entry: 'src/index.js',
-  svgSpriteLoaderDirs: svgSpriteDirs,
   theme: "./theme.config.js",
-  publicPath: `/${version}/`,
-  outputPath: `./dist/${version}`,
-  // 接口代理示例
-  proxy: {
-    "/api/v1/weather": {
-      "target": "https://api.seniverse.com/",
-      "changeOrigin": true,
-      "pathRewrite": { "^/api/v1/weather": "/v3/weather" }
-    },
-    // "/api/v2": {
-    //   "target": "http://192.168.0.110",
-    //   "changeOrigin": true,
-    //   "pathRewrite": { "^/api/v2" : "/api/v2" }
-    // }
-  },
+  // proxy: {
+  //   "/sword": {
+  //     "target": "http://sword.tarsocial.com",
+  //     "changeOrigin": true,
+  //     "pathRewrite": {
+  //       "^/sword": ""
+  //     }
+  //   },
+  // },
   env: {
     development: {
       extraBabelPlugins: [
         "dva-hmr",
         "transform-runtime",
+        "transform-decorators-legacy",
+        "lodash",
         [
           "import", {
             "libraryName": "antd",
@@ -39,8 +31,12 @@ export default {
       ]
     },
     production: {
+      // BRANCH_NAME2 为了在gitlab中可用
+      publicPath: branchName ? `http://cdn.tarsocial.com/visual/${branchName.replace(/\./ig, '')}/` : '/',
       extraBabelPlugins: [
         "transform-runtime",
+        "transform-decorators-legacy",
+        "lodash",
         [
           "import", {
             "libraryName": "antd",
@@ -49,9 +45,5 @@ export default {
         ]
       ]
     }
-  },
-  dllPlugin: {
-    exclude: ["babel-runtime", "roadhog", "cross-env"],
-    include: ["dva/router", "dva/saga", "dva/fetch"]
   }
 }

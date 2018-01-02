@@ -167,3 +167,17 @@ web
 移动
 
 ![](assets/4.2.1-demo-2.gif)
+
+## 本样本文件分支和主分枝的差别
+
+移除功能
+
+- 放弃 dll，删除相关指令 `build:dll`
+- 放弃内置版本控制，删除相关指令 `build:new`
+
+新增功能
+
+- 加入 `gitlab-ci` 的持续集成
+- 加入 `jsconfig.json` 让vscode不对装饰器报错
+- 主题文件新建 `cover.less` 对样式进行丑陋覆盖，比如 `! important` 的使用
+- 集成异常上报机制 `sentry`

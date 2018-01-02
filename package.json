@@ -44,6 +44,8 @@
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.4.0",
     "babel-plugin-import": "^1.1.1",
+    "babel-plugin-lodash": "^3.3.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-runtime": "^6.9.2",
     "copy-webpack-plugin": "^4.0.1",
@@ -60,13 +62,16 @@
     "redbox-react": "^1.2.10",
     "roadhog": "1.3.1"
   },
-  "pre-commit": ["lint"],
+  "pre-commit": [
+    "lint"
+  ],
   "scripts": {
-    "dev": "cross-env BROWSER=none HOST=0.0.0.0 roadhog server",
-    "start": "roadhog buildDll && cross-env BROWSER=none HOST=0.0.0.0 roadhog server",
+    "dev": "cross-env API_ENV=test BROWSER=none HOST=0.0.0.0 roadhog server",
+    "dev:prod": "cross-env API_ENV=prod BROWSER=none HOST=0.0.0.0 roadhog server",
     "lint": "eslint --fix --ext .js src",
-    "build": "roadhog build",
-    "build:dll": "roadhog buildDll",
-    "build:new": "node version && roadhog build"
+    "local:build": "BRANCH_NAME=$(git symbolic-ref --short HEAD) roadhog build",
+    "build": "BRANCH_NAME2=$CI_COMMIT_REF_NAME roadhog build",
+    "build:test": "API_ENV=test npm run build",
+    "build:prod": "API_ENV=prod npm run build"
   }
 }

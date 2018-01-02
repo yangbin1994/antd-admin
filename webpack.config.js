@@ -9,7 +9,7 @@ module.exports = (webpackConfig, env) => {
 
   if (production) {
     if (webpackConfig.module) {
-    // ClassnameHash
+      // ClassnameHash
       webpackConfig.module.rules.map((item) => {
         if (String(item.test) === '/\\.less$/' || String(item.test) === '/\\.css/') {
           item.use.filter(iitem => iitem.loader === 'css')[0].options.localIdentName = '[hash:base64:5]'
@@ -33,15 +33,30 @@ module.exports = (webpackConfig, env) => {
       },
     ]),
     new HtmlWebpackPlugin({
+      development: env === 'development',
       template: `${__dirname}/src/entry.ejs`,
-      filename: production ? '../index.html' : 'index.html',
+      filename: 'index.html',
       minify: production ? {
         collapseWhitespace: true,
       } : null,
       hash: true,
-      headScripts: production ? null : ['/roadhog.dll.js'],
+      headScripts: [
+        // '//at.alicdn.com/t/font_400620_8ux5h7ktgdwe9udi.js',
+        `${webpackConfig.output.publicPath}iconfont.js`
+      ],
+      headLinks: [
+        // '//at.alicdn.com/t/font_400620_8ux5h7ktgdwe9udi.css',
+        `${webpackConfig.output.publicPath}iconfont.css`,
+      ]
     }),
   ])
+
+  // custom env
+  webpackConfig.plugins.push(
+    new webpack.DefinePlugin({
+      '__API_ENV__': JSON.stringify(process.env.API_ENV)
+    })
+  )
 
   // Alias
   webpackConfig.resolve.alias = {

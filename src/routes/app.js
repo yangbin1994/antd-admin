@@ -93,14 +93,6 @@ const App = ({
   return (
     <div>
       <Loader fullScreen spinning={loading.effects['app/query']} />
-      <Helmet>
-        <title>ANTD ADMIN</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href={logo} type="image/x-icon" />
-        {iconFontJS && <script src={iconFontJS} />}
-        {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
-      </Helmet>
-
       <Layout className={classnames({ [styles.dark]: darkTheme, [styles.light]: !darkTheme })}>
         {!isNavbar && <Sider
           trigger={null}
